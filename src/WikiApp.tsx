@@ -1,9 +1,8 @@
 import { useEffect, useEffectEvent, useMemo, useState } from 'react'
-import { ArrowDownRight, ArrowRight, ArrowUpRight, BookOpen, Check, Clock3, Command, ExternalLink, FilePenLine, Globe2, Layers3, Menu, Newspaper, Search, Settings2, ShieldCheck, Sparkles, X } from 'lucide-react'
+import { ArrowDownRight, ArrowRight, ArrowUpRight, BookOpen, Clock3, Command, ExternalLink, Globe2, Layers3, Menu, Newspaper, Search, ShieldCheck, Sparkles, X } from 'lucide-react'
 import './WikiApp.css'
 
 type Article = { id: string; title: string; category: string; level: string; intro: string; body: string[]; updated: string; read: string }
-type Proposal = { id: string; articleId: string; title: string; intro: string; source: string; origin: 'AI' | 'Community'; created: string }
 type Coin = { id: string; symbol: string; name: string; image?: string; current_price: number; price_change_percentage_24h: number; market_cap_rank: number }
 type News = { title: string; link: string; author?: string; source?: string }
 
@@ -24,84 +23,63 @@ const categories = [
 const starterCoins: Coin[] = [
   { id: 'bitcoin', symbol: 'btc', name: 'Bitcoin', current_price: 0, price_change_percentage_24h: 0, market_cap_rank: 1 }, { id: 'ethereum', symbol: 'eth', name: 'Ethereum', current_price: 0, price_change_percentage_24h: 0, market_cap_rank: 2 }, { id: 'solana', symbol: 'sol', name: 'Solana', current_price: 0, price_change_percentage_24h: 0, market_cap_rank: 3 }, { id: 'usd-coin', symbol: 'usdc', name: 'USDC', current_price: 1, price_change_percentage_24h: 0, market_cap_rank: 4 },
 ]
-const exampleProposals: Proposal[] = [
-  { id: 'example-1', articleId: 'ethereum', title: 'Ethereum', intro: 'A programmable blockchain for applications and digital assets, maintained by validators who stake ETH. The network supports a growing ecosystem of layer 2 rollups.', source: 'Example editorial suggestion', origin: 'Community', created: '12 min ago' },
-  { id: 'example-2', articleId: 'wallets', title: 'Crypto wallets', intro: 'Tools for managing the keys that authorize blockchain transactions. A wallet signs instructions; the assets remain recorded on the network.', source: 'Example editorial suggestion', origin: 'Community', created: '1 hr ago' },
-]
 const saved = <T,>(key: string, fallback: T): T => {
   try { const value = localStorage.getItem(key); return value ? JSON.parse(value) as T : fallback } catch { return fallback }
 }
 const money = (value: number) => value >= 1000 ? `$${value.toLocaleString('en-US', { maximumFractionDigits: 0 })}` : `$${value.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 4 })}`
 
+const learningPaths = [
+  { name: 'Basics', description: 'Get oriented with the core ideas.', articleIds: ['bitcoin', 'ethereum', 'wallets'], time: '27 min' },
+  { name: 'Mechanisms', description: 'See how networks and programs work.', articleIds: ['consensus', 'smart-contracts', 'defi'], time: '31 min' },
+  { name: 'Use safely', description: 'Understand custody, pegs, and venues.', articleIds: ['wallets', 'stablecoins', 'exchanges'], time: '25 min' },
+]
+const cryptoTerms = [
+  { term: 'Consensus', category: 'NETWORKS', definition: 'The rules that let independent participants agree on one valid transaction history.' },
+  { term: 'Seed phrase', category: 'WALLETS', definition: 'A sequence of words that can restore a wallet’s keys. Anyone who gets it may control the wallet.' },
+  { term: 'Gas fee', category: 'TRANSACTIONS', definition: 'A fee paid to process a transaction or computation on a blockchain network.' },
+  { term: 'Stablecoin', category: 'TOKENS', definition: 'A token designed to track another asset’s value. Its target price is not guaranteed.' },
+]
+const cryptoQuiz = [
+  { question: 'What should you do with a wallet recovery phrase?', options: ['Share it to verify your wallet', 'Keep it private and store it securely', 'Save it in a public cloud note'], answer: 1, explanation: 'Anyone with the recovery phrase may be able to control the wallet. Keep it private and offline.' },
+  { question: 'Does a stablecoin always keep its target price?', options: ['Yes, that is guaranteed', 'Only on popular exchanges', 'No, the peg can fail'], answer: 2, explanation: 'A stablecoin can lose its peg. Check its reserves, redemption terms, issuer, and market conditions.' },
+  { question: 'Does a smart-contract audit guarantee that code is safe?', options: ['No, it can reduce but not remove risk', 'Yes, if two firms audit it', 'Yes, once it is on a blockchain'], answer: 0, explanation: 'An audit can find some issues, but it cannot prove a contract is free of bugs or other risks.' },
+]
+
 export default function WikiApp() {
-  const [articles, setArticles] = useState<Article[]>(() => saved('cw-articles', starterArticles))
-  const [proposals, setProposals] = useState<Proposal[]>(() => saved('cw-proposals', exampleProposals))
+  const [articles] = useState<Article[]>(() => saved('cw-articles', starterArticles))
   const [coins, setCoins] = useState<Coin[]>(starterCoins)
   const [news, setNews] = useState<News[]>([])
   const [newsSource, setNewsSource] = useState('')
   const [category, setCategory] = useState('All topics')
   const [query, setQuery] = useState('')
+  const [learningPathIndex, setLearningPathIndex] = useState(0)
+  const [termIndex, setTermIndex] = useState(0)
+  const [quizIndex, setQuizIndex] = useState(0)
+  const [quizAnswer, setQuizAnswer] = useState<number | null>(null)
   const [searchExpanded, setSearchExpanded] = useState(false)
   const [activeArticle, setActiveArticle] = useState<Article | null>(null)
-  const [editTarget, setEditTarget] = useState<Article | null>(null)
-  const [settingsOpen, setSettingsOpen] = useState(false)
-  const [aiConfigured, setAiConfigured] = useState(false)
-  const [aiModel, setAiModel] = useState('gpt-4o-mini')
   const [marketStatus, setMarketStatus] = useState<'loading' | 'live' | 'sample'>('loading')
   const [refreshing, setRefreshing] = useState(false)
   const [lastUpdated, setLastUpdated] = useState('Loading sources')
   const [notice, setNotice] = useState('')
   const [mobileNavOpen, setMobileNavOpen] = useState(false)
 
-  useEffect(() => { localStorage.setItem('cw-articles', JSON.stringify(articles)) }, [articles])
-  useEffect(() => { localStorage.setItem('cw-proposals', JSON.stringify(proposals)) }, [proposals])
-
-  async function checkAiStatus(showNotice = false) {
-    try {
-      const response = await fetch('/api/status')
-      if (!response.ok) throw new Error('API status unavailable')
-      const status = await response.json() as { aiConfigured?: boolean; model?: string }
-      setAiConfigured(Boolean(status.aiConfigured))
-      setAiModel(status.model || 'gpt-4o-mini')
-      if (showNotice) setNotice(status.aiConfigured ? `AI is ready (${status.model || 'configured model'}).` : 'AI is not configured. Add OPENAI_API_KEY to .env and restart.')
-    } catch {
-      setAiConfigured(false)
-      if (showNotice) setNotice('Could not reach the local research API.')
-    }
-  }
-
-  async function refreshResearch(makeDraft = false) {
+  async function refreshResearch() {
     setRefreshing(true)
     const outcomes = await Promise.allSettled([
       fetch('/api/market').then((response) => { if (!response.ok) throw new Error('Market feed unavailable'); return response.json() as Promise<Coin[]> }),
       fetch('/api/news').then((response) => { if (!response.ok) throw new Error('News feed unavailable'); return response.json() as Promise<{ items?: News[]; source?: string }> }),
     ])
-    let freshHeadlines: News[] = []
     if (outcomes[0].status === 'fulfilled' && outcomes[0].value.length) { setCoins(outcomes[0].value); setMarketStatus('live') }
     else { setMarketStatus('sample') }
-    if (outcomes[1].status === 'fulfilled') { freshHeadlines = outcomes[1].value.items ?? []; setNews(freshHeadlines.slice(0, 4)); setNewsSource(outcomes[1].value.source ?? 'Crypto news') }
+    if (outcomes[1].status === 'fulfilled') { const headlines = outcomes[1].value.items ?? []; setNews(headlines.slice(0, 4)); setNewsSource(outcomes[1].value.source ?? 'Crypto news') }
     setLastUpdated(new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }))
-    if (makeDraft && !aiConfigured) {
-      setSettingsOpen(true)
-      setNotice('AI is not configured. Add OPENAI_API_KEY to .env and restart.')
-    } else if (makeDraft && freshHeadlines.length) {
-      try {
-        const response = await fetch('/api/draft', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ articles: articles.map((article) => ({ title: article.title })), headlines: freshHeadlines }) })
-        const draft = await response.json() as { title?: string; summary?: string; source?: string; error?: string }
-        if (!response.ok) throw new Error(draft.error || 'AI request failed.')
-        const match = articles.find((article) => article.title.toLowerCase() === draft.title?.toLowerCase()) ?? articles[0]
-        if (draft.summary && match) {
-          setProposals((current) => [{ id: crypto.randomUUID(), articleId: match.id, title: match.title, intro: draft.summary!, source: draft.source ?? newsSource, origin: 'AI', created: 'Just now' }, ...current])
-          setNotice('AI draft added to the review queue. Nothing was published.')
-        }
-      } catch (error) { setNotice(error instanceof Error ? error.message : 'Could not generate an AI draft.') }
-    } else if (makeDraft) { setNotice('No source headlines were available for an AI draft.') }
-    else if (outcomes.some((outcome) => outcome.status === 'fulfilled')) { setNotice('Source refresh complete.') }
+    if (outcomes.some((outcome) => outcome.status === 'fulfilled')) { setNotice('Source refresh complete.') }
     else { setNotice('Live sources could not be reached. Showing the reference library.') }
     setRefreshing(false)
   }
 
-  const refreshOnSchedule = useEffectEvent(() => { void checkAiStatus(); void refreshResearch() })
+  const refreshOnSchedule = useEffectEvent(() => { void refreshResearch() })
   useEffect(() => {
     const initial = window.setTimeout(() => refreshOnSchedule(), 0)
     const timer = window.setInterval(() => refreshOnSchedule(), 10 * 60 * 1000)
@@ -119,19 +97,13 @@ export default function WikiApp() {
   }, [])
 
   const visibleArticles = useMemo(() => articles.filter((article) => (category === 'All topics' || article.category === category || (category === 'Guides' && article.level === 'Beginner')) && `${article.title} ${article.intro} ${article.category}`.toLowerCase().includes(query.toLowerCase())), [articles, category, query])
-
-  function saveSuggestion(title: string, intro: string, source: string) {
-    if (!editTarget || !title.trim() || !intro.trim()) return
-    setProposals((current) => [{ id: crypto.randomUUID(), articleId: editTarget.id, title: title.trim(), intro: intro.trim(), source: source.trim() || 'Community contribution', origin: 'Community', created: 'Just now' }, ...current])
-    setEditTarget(null)
-    setNotice('Suggestion sent to the review queue.')
-  }
-
-  function reviewProposal(proposal: Proposal, publish: boolean) {
-    if (publish) setArticles((current) => current.map((article) => article.id === proposal.articleId ? { ...article, title: proposal.title, intro: proposal.intro, updated: new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) } : article))
-    setProposals((current) => current.filter((item) => item.id !== proposal.id))
-    setNotice(publish ? 'Edit approved and published.' : 'Suggestion dismissed.')
-  }
+  const activeLearningPath = learningPaths[learningPathIndex]
+  const learningPathArticles = activeLearningPath.articleIds.flatMap((id) => {
+    const article = articles.find((item) => item.id === id)
+    return article ? [article] : []
+  })
+  const activeTerm = cryptoTerms[termIndex]
+  const activeQuiz = cryptoQuiz[quizIndex]
 
   return (
     <div className="app-shell">
@@ -139,54 +111,41 @@ export default function WikiApp() {
         <button className="mobile-menu icon-button" title="Toggle navigation" onClick={() => setMobileNavOpen(!mobileNavOpen)}><Menu size={19} /></button>
         <a className="wordmark" href="#home" onClick={() => { setCategory('All topics'); setQuery('') }}><span className="brand-mark">cw</span><span>cryptocurrency<span className="wordmark-light">.wiki</span></span></a>
         <div className={`searchbox ${searchExpanded ? 'search-expanded' : ''}`}><button className="search-trigger icon-button" aria-label="Open search" onClick={() => { setSearchExpanded(true); window.setTimeout(() => document.getElementById('encyclopedia-search')?.focus(), 0) }}><Search size={17} /></button><input id="encyclopedia-search" aria-label="Search the encyclopedia" placeholder="Search the encyclopedia..." value={query} onChange={(event) => setQuery(event.target.value)} /></div>
-        <div className="top-actions"><span className="independent"><span /> Independent resource</span><button className="settings-button" onClick={() => setSettingsOpen(true)}><Settings2 size={16} /><span>AI settings</span></button></div>
+        <div className="top-actions"><span className="independent"><span /> Independent resource</span></div>
       </header>
       <div className="workspace">
         <aside className={`sidebar ${mobileNavOpen ? 'sidebar-open' : ''}`}>
           <div className="side-label">THE LIBRARY</div>
           <nav className="category-nav" aria-label="Article categories">{categories.map(({ name, count, icon: Icon }) => <button className={`nav-item ${category === name ? 'nav-active' : ''}`} key={name} onClick={() => { setCategory(name); setMobileNavOpen(false) }}><Icon size={17} strokeWidth={1.8} /><span>{name}</span><span className="nav-count">{count}</span></button>)}</nav>
-          <div className="side-divider" /><div className="side-label">THE DESK</div>
-          <button className="nav-item" onClick={() => document.getElementById('review-desk')?.scrollIntoView({ behavior: 'smooth' })}><FilePenLine size={17} /><span>Review queue</span><span className="nav-count queue-count">{proposals.length}</span></button>
-          <button className="nav-item" onClick={() => document.getElementById('newsroom')?.scrollIntoView({ behavior: 'smooth' })}><Clock3 size={17} /><span>Recent changes</span></button>
+          <div className="side-divider" />
+          <button className="nav-item" onClick={() => document.getElementById('newsroom')?.scrollIntoView({ behavior: 'smooth' })}><Clock3 size={17} /><span>Industry updates</span></button>
           <div className="sidebar-note"><div className="note-icon"><ShieldCheck size={16} /></div><p>Independent by design.</p><span>Educational reference, not financial advice.</span></div>
           <div className="sidebar-foot"><span className="foot-dot" /> Sources checked {lastUpdated}</div>
         </aside>
         <main className="main-content" id="home">
           <div className="eyebrow"><span className="eyebrow-mark">CW</span> THE OPEN CRYPTO ENCYCLOPEDIA <span className="eyebrow-rule" /></div>
           <section className="intro-row"><div><h1>Understand the<br /><em>whole chain.</em></h1><p className="intro-copy">An independent guide to the technology, people, and ideas changing money.</p></div><div className="intro-aside"><span className="asterisk">✳</span><span>Curious minds<br />welcome here.</span></div></section>
-          <section className="market-strip" aria-label="Cryptocurrency market overview"><div className="market-heading"><span className="live-indicator" /><span>MARKET PULSE</span><span className="market-caption">{marketStatus === 'live' ? 'LIVE · USD' : marketStatus === 'loading' ? 'CONNECTING' : 'SAMPLE · USD'}</span></div><div className="coin-row">{coins.slice(0, 4).map((coin, index) => <div className="coin-item" key={coin.id}><div className={`coin-icon coin-${index}`}>{coin.image ? <img src={coin.image} alt="" /> : coin.symbol.slice(0, 1).toUpperCase()}</div><div className="coin-info"><span className="coin-name">{coin.symbol.toUpperCase()} <small>{coin.name}</small></span><strong>{coin.current_price ? money(coin.current_price) : '—'}</strong></div><span className={`coin-change ${coin.price_change_percentage_24h < 0 ? 'negative' : ''}`}>{coin.current_price ? <>{coin.price_change_percentage_24h < 0 ? <ArrowDownRight size={13} /> : <ArrowUpRight size={13} />}{Math.abs(coin.price_change_percentage_24h).toFixed(2)}%</> : '···'}</span></div>)}</div><button className="refresh-button" title="Refresh market and news sources" onClick={() => void refreshResearch()} disabled={refreshing}>{refreshing ? <span className="spinner" /> : <ArrowRight size={15} />}{refreshing ? 'Updating' : 'Refresh'}</button></section>
+          <div className="market-module"><section className="market-strip" aria-label="Cryptocurrency market overview"><div className="market-heading"><span className="live-indicator" /><span>MARKET PULSE</span><span className="market-caption">{marketStatus === 'live' ? 'LIVE · USD' : marketStatus === 'loading' ? 'CONNECTING' : 'SAMPLE · USD'}</span></div><div className="coin-row">{coins.slice(0, 4).map((coin, index) => <div className="coin-item" key={coin.id}><div className={`coin-icon coin-${index}`}>{coin.image ? <img src={coin.image} alt="" /> : coin.symbol.slice(0, 1).toUpperCase()}</div><div className="coin-info"><span className="coin-name">{coin.symbol.toUpperCase()} <small>{coin.name}</small></span><strong>{coin.current_price ? money(coin.current_price) : '—'}</strong></div><span className={`coin-change ${coin.price_change_percentage_24h < 0 ? 'negative' : ''}`}>{coin.current_price ? <>{coin.price_change_percentage_24h < 0 ? <ArrowDownRight size={13} /> : <ArrowUpRight size={13} />}{Math.abs(coin.price_change_percentage_24h).toFixed(2)}%</> : '···'}</span></div>)}</div></section><div className="market-actions"><button className="refresh-button" title="Refresh market and news sources" onClick={() => void refreshResearch()} disabled={refreshing}>{refreshing ? <span className="spinner" /> : <ArrowRight size={15} />}{refreshing ? 'Updating' : 'Refresh'}</button></div></div>
           <div className="content-grid">
             <section className="library-column">
               <div className="section-heading"><div><span className="section-kicker">A PLACE TO BEGIN</span><h2>{query ? 'Search results' : category === 'All topics' ? 'Start with the essentials' : category}</h2></div><button className="text-link" onClick={() => { setCategory('All topics'); setQuery('') }}>Browse all <ArrowRight size={15} /></button></div>
-              {visibleArticles.length === 0 ? <div className="empty-state">No entries match that search yet. Try another term.</div> : <div className="article-grid">{visibleArticles.slice(0, 6).map((article, index) => <button className={`article-card article-card-${index % 3}`} key={article.id} onClick={() => setActiveArticle(article)}><div className="article-card-top"><span className="article-category">{article.category}</span><ArrowRight size={16} /></div><h3>{article.title}</h3><p>{article.intro}</p><div className="article-meta"><span>{article.level}</span><span className="meta-dot" /><span>{article.read} read</span></div></button>)}</div>}
+              {visibleArticles.length === 0 ? <div className="empty-state">No entries match that search yet. Try another term.</div> : <div className="article-grid">{visibleArticles.slice(0, 6).map((article, index) => <button className={`article-card article-card-${index % 3} article-card-topic-${article.id}`} key={article.id} onClick={() => setActiveArticle(article)}><div className="article-card-top"><span className="article-category">{article.category}</span><ArrowRight size={16} /></div><h3>{article.title}</h3><p>{article.intro}</p><div className="article-meta"><span>{article.level}</span><span className="meta-dot" /><span>{article.read} read</span></div></button>)}</div>}
               <section className="featured-band"><div className="feature-copy"><span className="section-kicker">FIELD GUIDE · 01</span><h2>Start with the<br /><em>building blocks.</em></h2><p>From blocks and keys to markets and protocols: clear explanations, built one idea at a time.</p><button className="dark-button" onClick={() => { setCategory('Blockchain'); document.getElementById('home')?.scrollIntoView({ behavior: 'smooth' }) }}>Explore the guide <ArrowRight size={15} /></button></div><div className="chain-art" aria-hidden="true"><div className="chain-orbit orbit-one" /><div className="chain-orbit orbit-two" /><div className="chain-core">⛓</div><span className="chain-node node-one">01</span><span className="chain-node node-two">02</span><span className="chain-node node-three">03</span><span className="chain-tag">BLOCKCHAIN / 101</span></div></section>
               <section className="news-section" id="newsroom"><div className="section-heading news-heading"><div><span className="section-kicker">FROM THE WIRES</span><h2>Industry, in context</h2></div><span className="source-label">{news.length ? newsSource.toUpperCase() : 'REFERENCE DESK'}</span></div>{news.length ? <div className="news-list">{news.slice(0, 4).map((item, index) => <a className="news-item" href={item.link} key={`${item.link}-${index}`} target="_blank" rel="noreferrer"><span className="news-index">0{index + 1}</span><span className="news-title">{item.title}</span><span className="news-source">{item.source || newsSource} <ExternalLink size={12} /></span></a>)}</div> : <div className="news-empty"><Newspaper size={17} /><span>Refresh to fetch current industry coverage. Headlines are treated as sources, not encyclopedia facts.</span></div>}</section>
             </section>
-            <aside className="desk-column">
-              <section className="review-panel" id="review-desk"><div className="panel-head"><div><span className="section-kicker">EDITORIAL DESK</span><h2>Proposed edits <span className="proposal-count">{proposals.length}</span></h2></div><button className="panel-menu icon-button" title="AI settings" onClick={() => setSettingsOpen(true)}><Settings2 size={17} /></button></div><p className="panel-description">Every update gets a human read before it enters the library.</p><button className="draft-ai-button" onClick={() => void refreshResearch(true)} disabled={refreshing}><Sparkles size={14} /> Draft from latest news</button>{proposals.length ? <div className="proposal-list">{proposals.map((proposal) => <article className="proposal-card" key={proposal.id}><div className="proposal-top"><span className={`origin-tag ${proposal.origin === 'AI' ? 'origin-ai' : ''}`}>{proposal.origin === 'AI' ? <Sparkles size={11} /> : <FilePenLine size={11} />}{proposal.origin} PROPOSAL</span><span className="proposal-time">{proposal.created}</span></div><h3>{proposal.title}</h3><p>{proposal.intro}</p><div className="proposal-source">Source: {proposal.source}</div><div className="proposal-actions"><button className="approve-button" onClick={() => reviewProposal(proposal, true)}><Check size={14} /> Approve</button><button className="dismiss-button" onClick={() => reviewProposal(proposal, false)}>Dismiss</button></div></article>)}</div> : <div className="queue-empty"><Check size={19} /><span>The desk is clear.</span></div>}<button className="submit-edit" onClick={() => setEditTarget(articles[0] ?? null)}><FilePenLine size={15} /> Suggest an edit</button></section>
-              <section className="quick-panel"><div className="quick-heading"><span className="section-kicker">REFERENCE, NOT HYPE</span><span className="quick-star">✳</span></div><p>Understand the mechanism. Check the source. Make your own call.</p><div className="quick-rule" /><span className="quick-caption">INDEPENDENT · EDUCATIONAL · OPEN</span></section>
+            <aside className="context-column">
+              <section className="learning-panel"><div className="learning-heading"><span className="section-kicker">GUIDED LEARNING</span><span className="learning-step-count">{String(learningPathIndex + 1).padStart(2, '0')} / {String(learningPaths.length).padStart(2, '0')}</span></div><h2>Choose a path</h2><p className="learning-description">{activeLearningPath.description}</p><div className="learning-path-tabs" role="tablist" aria-label="Learning paths">{learningPaths.map((path, index) => <button key={path.name} type="button" role="tab" aria-selected={learningPathIndex === index} className={`learning-path-tab ${learningPathIndex === index ? 'learning-path-active' : ''}`} onClick={() => setLearningPathIndex(index)}>{path.name}</button>)}</div><div className="learning-steps">{learningPathArticles.map((article, index) => <button className="learning-step" type="button" key={article.id} onClick={() => setActiveArticle(article)}><span className="learning-step-number">0{index + 1}</span><span className="learning-step-title">{article.title}</span><ArrowRight size={14} /></button>)}</div><div className="learning-time"><BookOpen size={13} /> About {activeLearningPath.time}</div></section>
+              <section className="term-panel" aria-live="polite"><div className="term-panel-heading"><span className="section-kicker">CRYPTO TERM</span><button type="button" onClick={() => setTermIndex((index) => (index + 1) % cryptoTerms.length)} aria-label="Show another crypto term">Next <ArrowRight size={13} /></button></div><span className="term-category">{activeTerm.category}</span><h2>{activeTerm.term}</h2><p>{activeTerm.definition}</p></section>
+              <section className="quick-check" aria-labelledby="quick-check-title"><div className="quiz-heading"><span className="section-kicker">QUICK CHECK</span><span>{String(quizIndex + 1).padStart(2, '0')} / {String(cryptoQuiz.length).padStart(2, '0')}</span></div><h2 id="quick-check-title">{activeQuiz.question}</h2><div className="quiz-options">{activeQuiz.options.map((option, index) => <button type="button" className={`quiz-option ${quizAnswer === index ? 'quiz-option-selected' : ''}`} aria-pressed={quizAnswer === index} key={option} onClick={() => setQuizAnswer(index)}><span className="quiz-option-marker">{String.fromCharCode(65 + index)}</span><span>{option}</span></button>)}</div>{quizAnswer !== null && <div className={`quiz-feedback ${quizAnswer === activeQuiz.answer ? 'quiz-feedback-correct' : 'quiz-feedback-incorrect'}`} role="status"><strong>{quizAnswer === activeQuiz.answer ? 'Correct' : 'Not quite'}</strong><span>{activeQuiz.explanation}</span></div>}<button className="quiz-next" type="button" onClick={() => { setQuizIndex((index) => (index + 1) % cryptoQuiz.length); setQuizAnswer(null) }}>Next question <ArrowRight size={14} /></button></section>
               <section className="recent-panel"><div className="recent-heading"><span className="section-kicker">RECENTLY REVISED</span><button title="Refresh sources" onClick={() => void refreshResearch()}><Clock3 size={15} /></button></div>{articles.slice(0, 4).map((article) => <button className="recent-row" key={article.id} onClick={() => setActiveArticle(article)}><span className="recent-bullet" /><span>{article.title}</span><time>{article.updated.replace(', 2026', '')}</time></button>)}</section>
-              <div className="ai-status"><span className={`ai-status-dot ${aiConfigured ? 'configured' : ''}`} /><span>{aiConfigured ? 'AI research ready' : 'AI not configured'}</span><button onClick={() => setSettingsOpen(true)}>{aiConfigured ? 'Manage' : 'Set up'} <ArrowRight size={13} /></button></div>
             </aside>
           </div>
           <footer className="page-footer"><span>cryptocurrency.wiki <span className="footer-dot">·</span> Independent educational resource</span><span>Information only. Not financial advice.</span></footer>
         </main>
       </div>
       {notice && <div className="toast" role="status">{notice}<button title="Dismiss" onClick={() => setNotice('')}><X size={14} /></button></div>}
-      {activeArticle && <div className="modal-backdrop" onMouseDown={(event) => { if (event.target === event.currentTarget) setActiveArticle(null) }}><article className="article-modal"><button className="modal-close icon-button" title="Close article" onClick={() => setActiveArticle(null)}><X size={18} /></button><span className="section-kicker">{activeArticle.category.toUpperCase()} · {activeArticle.level.toUpperCase()}</span><h2>{activeArticle.title}</h2><p className="modal-lead">{activeArticle.intro}</p>{activeArticle.body.map((paragraph) => <p className="modal-body" key={paragraph}>{paragraph}</p>)}<div className="modal-meta">Updated {activeArticle.updated} <span>·</span> {activeArticle.read} read</div><button className="dark-button" onClick={() => { setEditTarget(activeArticle); setActiveArticle(null) }}><FilePenLine size={15} /> Suggest an edit</button></article></div>}
-      {editTarget && <SuggestionModal article={editTarget} onClose={() => setEditTarget(null)} onSubmit={saveSuggestion} />}
-      {settingsOpen && <SettingsModal configured={aiConfigured} model={aiModel} onClose={() => setSettingsOpen(false)} onCheck={() => void checkAiStatus(true)} />}
+      {activeArticle && <div className="modal-backdrop" onMouseDown={(event) => { if (event.target === event.currentTarget) setActiveArticle(null) }}><article className="article-modal"><button className="modal-close icon-button" title="Close article" onClick={() => setActiveArticle(null)}><X size={18} /></button><span className="section-kicker">{activeArticle.category.toUpperCase()} · {activeArticle.level.toUpperCase()}</span><h2>{activeArticle.title}</h2><p className="modal-lead">{activeArticle.intro}</p>{activeArticle.body.map((paragraph) => <p className="modal-body" key={paragraph}>{paragraph}</p>)}<div className="modal-meta">Updated {activeArticle.updated} <span>·</span> {activeArticle.read} read</div></article></div>}
     </div>
   )
 }
 
-function SuggestionModal({ article, onClose, onSubmit }: { article: Article; onClose: () => void; onSubmit: (title: string, intro: string, source: string) => void }) {
-  const [title, setTitle] = useState(article.title)
-  const [intro, setIntro] = useState(article.intro)
-  const [source, setSource] = useState('')
-  return <div className="modal-backdrop" onMouseDown={(event) => { if (event.target === event.currentTarget) onClose() }}><form className="form-modal" onSubmit={(event) => { event.preventDefault(); onSubmit(title, intro, source) }}><button type="button" className="modal-close icon-button" title="Close form" onClick={onClose}><X size={18} /></button><span className="section-kicker">CONTRIBUTE TO THE LIBRARY</span><h2>Suggest an edit</h2><p className="form-intro">Your suggestion will be reviewed before publication.</p><label>Entry title<input value={title} onChange={(event) => setTitle(event.target.value)} required /></label><label>Proposed summary<textarea value={intro} onChange={(event) => setIntro(event.target.value)} rows={4} required /></label><label>Source link or citation<input value={source} onChange={(event) => setSource(event.target.value)} placeholder="https://..." /></label><button className="dark-button form-submit" type="submit">Send for review <ArrowRight size={15} /></button></form></div>
-}
-
-function SettingsModal({ configured, model, onClose, onCheck }: { configured: boolean; model: string; onClose: () => void; onCheck: () => void }) {
-  return <div className="modal-backdrop" onMouseDown={(event) => { if (event.target === event.currentTarget) onClose() }}><section className="form-modal settings-modal"><button type="button" className="modal-close icon-button" title="Close settings" onClick={onClose}><X size={18} /></button><span className="section-kicker">RESEARCH AUTOMATION</span><h2>AI settings</h2><p className="form-intro">Market and news sources refresh automatically every 10 minutes. AI drafts are created on demand and always go to editorial review.</p><div className="security-note"><ShieldCheck size={16} /><span>{configured ? `AI draft generation is enabled with ${model}.` : 'Add OPENAI_API_KEY to your .env file, then restart the app to enable AI drafts.'} The key stays on the server and is never sent to the browser.</span></div><button className="dark-button form-submit" type="button" onClick={onCheck}>Check AI connection <ArrowRight size={15} /></button></section></div>
-}

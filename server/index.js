@@ -1,6 +1,5 @@
 import 'dotenv/config'
 import express from 'express'
-import { rateLimit } from 'express-rate-limit'
 import Parser from 'rss-parser'
 import { existsSync } from 'node:fs'
 import path from 'node:path'
@@ -9,7 +8,6 @@ import { fileURLToPath } from 'node:url'
 const app = express()
 const parser = new Parser()
 const port = Number(process.env.PORT || 8787)
-const model = process.env.OPENAI_MODEL || 'gpt-4o-mini'
 const root = path.dirname(fileURLToPath(import.meta.url))
 const dist = path.resolve(root, '../dist')
 const sourceCache = new Map()
@@ -37,18 +35,8 @@ async function cachedSource(key, duration, load) {
   return entry.pending
 }
 
-const draftLimiter = rateLimit({
-  windowMs: 60 * 60 * 1000,
-  limit: 5,
-  standardHeaders: true,
-  legacyHeaders: false,
-  message: { error: 'AI draft limit reached. Try again later.' },
-})
-
-app.use(express.json({ limit: '100kb' }))
-
 app.get('/api/status', (_request, response) => {
-  response.json({ aiConfigured: Boolean(process.env.OPENAI_API_KEY), model })
+  response.json({ ok: true })
 })
 
 app.get('/api/market', async (_request, response) => {
@@ -93,44 +81,6 @@ app.get('/api/news', async (_request, response) => {
   } catch (error) {
     console.error('News feed error:', error instanceof Error ? error.message : error)
     response.status(502).json({ error: 'News feeds are temporarily unavailable.' })
-  }
-})
-
-app.post('/api/draft', draftLimiter, async (request, response) => {
-  const apiKey = process.env.OPENAI_API_KEY
-  if (!apiKey) return response.status(503).json({ error: 'AI is not configured. Add OPENAI_API_KEY to .env and restart the app.' })
-
-  const articles = Array.isArray(request.body?.articles) ? request.body.articles : []
-  const headlines = Array.isArray(request.body?.headlines) ? request.body.headlines : []
-  if (!headlines.length) return response.status(400).json({ error: 'No source headlines were provided.' })
-
-  try {
-    const upstream = await fetch('https://api.openai.com/v1/chat/completions', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${apiKey}` },
-      signal: AbortSignal.timeout(30000),
-      body: JSON.stringify({
-        model,
-        temperature: 0.2,
-        response_format: { type: 'json_object' },
-        messages: [
-          { role: 'system', content: 'You are an independent cryptocurrency encyclopedia editor. Use only the supplied headlines. Never give financial advice or invent details. Return JSON with title (an existing article title), summary (a neutral proposed update under 70 words), and source (the supporting headline and link).' },
-          { role: 'user', content: `Existing article titles: ${articles.map((article) => article.title).join(', ')}\nRecent source headlines:\n${headlines.slice(0, 8).map((item) => `${item.title} (${item.link})`).join('\n')}` },
-        ],
-      }),
-    })
-    if (!upstream.ok) {
-      const detail = await upstream.json().catch(() => ({}))
-      console.error('AI provider error:', upstream.status, detail.error?.message || '')
-      return response.status(502).json({ error: 'The AI provider could not generate a draft.' })
-    }
-    const result = await upstream.json()
-    const text = result.choices?.[0]?.message?.content
-    if (!text) throw new Error('The AI provider returned an empty response.')
-    response.json(JSON.parse(text))
-  } catch (error) {
-    console.error('AI draft error:', error instanceof Error ? error.message : error)
-    response.status(502).json({ error: 'Could not generate a draft from the current sources.' })
   }
 })
 
