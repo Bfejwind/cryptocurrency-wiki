@@ -1,0 +1,71 @@
+.lesson-shell { min-height: 100svh; background: #f3f5ef; color: #26382d; }
+.lesson-main { width: min(100%, 1120px); margin: 0 auto; padding: 23px 38px 20px; }
+.lesson-breadcrumb { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin: 0 0 15px; color: #929b93; font-size: 12px; }
+.lesson-breadcrumb a { color: #59745d; text-decoration: none; }
+.lesson-breadcrumb a:hover { color: #294839; }
+.lesson-hero { min-height: 245px; display: flex; flex-direction: column; justify-content: center; padding: 29px 34px; border-radius: 4px; background-color: #19382c; background-position: center 48%; background-size: cover; color: #fff; }
+.lesson-hero h1 { max-width: 780px; margin: 11px 0 8px; color: #fff; font: 500 39px/1.08 'Newsreader', Georgia, serif; }
+.lesson-hero > p { max-width: 690px; margin: 0; color: rgba(255,255,255,.88); font-size: 14px; line-height: 1.6; }
+.lesson-layout { display: grid; grid-template-columns: minmax(0, 1fr) 230px; gap: 38px; align-items: start; margin-top: 28px; }
+.lesson-content { min-width: 0; }
+.lesson-section { padding: 0 0 19px; margin-bottom: 20px; border-bottom: 1px solid #dfe5dc; }
+.lesson-section h2, .lesson-concepts h2, .lesson-exercise h2, .lesson-news h2, .lesson-resources h2 { margin: 0 0 9px; color: #2b3d31; font: 500 24px/1.15 'Newsreader', Georgia, serif; }
+.lesson-section p { margin: 0 0 10px; color: #617066; font-size: 13px; line-height: 1.8; }
+.lesson-section p:last-child { margin-bottom: 0; }
+.lesson-concepts { margin: 0 0 22px; }
+.lesson-concepts dl { margin: 0; border-top: 1px solid #dfe5dc; }
+.lesson-concepts dl > div { display: grid; grid-template-columns: minmax(130px, .38fr) minmax(0, 1fr); gap: 16px; padding: 10px 2px; border-bottom: 1px solid #dfe5dc; }
+.lesson-concepts dt { color: #47634d; font-size: 12px; font-weight: 600; }
+.lesson-concepts dd { margin: 0; color: #6b786e; font-size: 12px; line-height: 1.6; }
+.lesson-exercise { margin: 0 0 24px; padding: 17px 18px 16px; border-left: 3px solid #91aa8c; background: #eaf0e7; }
+.lesson-exercise > .guide-eyebrow { display: block; margin-bottom: 7px; color: #687e67; }
+.lesson-exercise h2 { font-size: 22px; }
+.lesson-exercise ol { margin: 0; padding-left: 19px; color: #5c6e61; font-size: 12px; line-height: 1.7; }
+.lesson-exercise li + li { margin-top: 4px; }
+.lesson-checkpoint { margin: 13px 0 0; color: #526956; font-size: 12px; line-height: 1.65; }
+.lesson-checkpoint strong { color: #355a3e; }
+.lesson-news { margin: 0 0 23px; }
+.lesson-news-heading { display: flex; align-items: end; justify-content: space-between; gap: 12px; margin-bottom: 8px; }
+.lesson-news-heading .guide-eyebrow { color: #78877b; font-size: 10px; }
+.lesson-news-heading h2 { margin-top: 4px; }
+.lesson-news-heading > span { color: #929b93; font-size: 11px; }
+.lesson-news > a { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 10px 2px; border-top: 1px solid #dfe5dc; color: #526258; text-decoration: none; font-size: 12px; line-height: 1.5; }
+.lesson-news > a:last-child { border-bottom: 1px solid #dfe5dc; }
+.lesson-news > a:hover { color: #2e6140; }
+.lesson-news > a svg { flex: none; color: #879489; }
+.lesson-resources { padding: 0 0 21px; border-bottom: 1px solid #dfe5dc; }
+.lesson-resources > a { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 9px 1px; border-top: 1px solid #e2e7e0; color: #55745a; text-decoration: none; font-size: 12px; }
+.lesson-resources > a:hover { color: #294839; }
+.lesson-resources > a svg { flex: none; }
+.lesson-aside { position: sticky; top: 88px; padding: 15px; border-top: 2px solid #739171; background: #eaf0e7; }
+.lesson-aside > p { margin: 9px 0 17px; color: #586b5c; font: 500 16px/1.35 'Newsreader', Georgia, serif; }
+.lesson-aside-progress { padding: 9px 0; border-top: 1px solid #d2ddcf; color: #7c8d7d; font: 10px 'DM Mono', monospace; }
+.lesson-outline-link { display: inline-flex; align-items: center; gap: 5px; margin-top: 10px; color: #4e6d53; text-decoration: none; font-size: 11px; }
+.lesson-outline-link:hover { color: #294839; }
+.lesson-pagination { display: flex; justify-content: space-between; gap: 16px; margin-top: 25px; padding: 15px 0; border-top: 1px solid #dfe5dc; border-bottom: 1px solid #dfe5dc; }
+.lesson-pagination > a { display: inline-flex; align-items: center; gap: 9px; max-width: 48%; color: #55745a; text-decoration: none; }
+.lesson-pagination > a:last-child { margin-left: auto; text-align: right; }
+.lesson-pagination > a > span { display: grid; gap: 3px; }
+.lesson-pagination small { color: #8b978c; font: 10px 'DM Mono', monospace; }
+.lesson-pagination strong { color: #4c6151; font-size: 12px; font-weight: 500; }
+.lesson-pagination > a:hover strong { color: #2e6140; }
+.lesson-footer { display: flex; justify-content: space-between; gap: 12px; padding: 15px 0; color: #8a958b; font-size: 12px; }
+.lesson-footer a { color: #527359; text-decoration: none; }
+.lesson-footer a:hover { color: #263f2e; }
+
+@media (max-width: 760px) {
+  .lesson-main { padding: 18px 22px 20px; }
+  .lesson-hero { min-height: 225px; padding: 24px; }
+  .lesson-hero h1 { font-size: 34px; }
+  .lesson-layout { grid-template-columns: minmax(0, 1fr); gap: 20px; }
+  .lesson-aside { position: static; }
+}
+@media (max-width: 480px) {
+  .lesson-main { padding: 14px 15px 18px; }
+  .lesson-hero { min-height: 220px; padding: 20px; }
+  .lesson-hero h1 { font-size: 30px; }
+  .lesson-hero > p { font-size: 13px; }
+  .lesson-concepts dl > div { grid-template-columns: minmax(0, 1fr); gap: 3px; }
+  .lesson-news-heading { align-items: start; flex-direction: column; gap: 4px; }
+  .lesson-footer { flex-direction: column; gap: 5px; }
+}

@@ -104,6 +104,13 @@ export default function WikiApp() {
   })
   const activeTerm = cryptoTerms[termIndex]
   const activeQuiz = cryptoQuiz[quizIndex]
+  const marketTools = [
+    { name: 'TradingView', type: 'CHARTS', description: 'Explore candlestick charts, technical indicators, and drawing tools.', url: 'https://www.tradingview.com/chart/' },
+    { name: 'CoinGecko', type: 'MARKET DATA', description: 'Compare prices, market capitalization, and supply information.', url: 'https://www.coingecko.com/' },
+    { name: 'CoinPaprika', type: 'MARKET DATA', description: 'Review asset listings, historical data, and market statistics.', url: 'https://coinpaprika.com/' },
+    { name: 'DefiLlama', type: 'DEFI ANALYTICS', description: 'Explore protocol, chain, and total-value-locked dashboards.', url: 'https://defillama.com/' },
+    { name: 'CoinGlass', type: 'DERIVATIVES DATA', description: 'Inspect funding rates, open interest, and liquidation data.', url: 'https://www.coinglass.com/' },
+  ]
 
   return (
     <div className="app-shell">
@@ -111,7 +118,7 @@ export default function WikiApp() {
         <button className="mobile-menu icon-button" title="Toggle navigation" onClick={() => setMobileNavOpen(!mobileNavOpen)}><Menu size={19} /></button>
         <a className="wordmark" href="#home" onClick={() => { setCategory('All topics'); setQuery('') }}><span className="brand-mark">cw</span><span>cryptocurrency<span className="wordmark-light">.wiki</span></span></a>
         <div className={`searchbox ${searchExpanded ? 'search-expanded' : ''}`}><button className="search-trigger icon-button" aria-label="Open search" onClick={() => { setSearchExpanded(true); window.setTimeout(() => document.getElementById('encyclopedia-search')?.focus(), 0) }}><Search size={17} /></button><input id="encyclopedia-search" aria-label="Search the encyclopedia" placeholder="Search the encyclopedia..." value={query} onChange={(event) => setQuery(event.target.value)} /></div>
-        <div className="top-actions"><span className="independent"><span /> Independent resource</span></div>
+        <div className="top-actions"><a className="guide-nav-link" href="/learn"><BookOpen size={15} /><span>Learning guide</span></a><span className="independent"><span /> Independent resource</span></div>
       </header>
       <div className="workspace">
         <aside className={`sidebar ${mobileNavOpen ? 'sidebar-open' : ''}`}>
@@ -140,6 +147,7 @@ export default function WikiApp() {
               <section className="recent-panel"><div className="recent-heading"><span className="section-kicker">RECENTLY REVISED</span><button title="Refresh sources" onClick={() => void refreshResearch()}><Clock3 size={15} /></button></div>{articles.slice(0, 4).map((article) => <button className="recent-row" key={article.id} onClick={() => setActiveArticle(article)}><span className="recent-bullet" /><span>{article.title}</span><time>{article.updated.replace(', 2026', '')}</time></button>)}</section>
             </aside>
           </div>
+          <section className="analysis-tools-section" id="market-tools" aria-labelledby="market-tools-title"><div className="section-heading"><div><span className="section-kicker">RESEARCH DESK</span><h2 id="market-tools-title">Market analysis tools</h2></div><span className="source-label">EXTERNAL RESOURCES</span></div><p className="analysis-tools-intro">Use multiple sources, understand what each metric measures, and verify data before drawing conclusions. These links are informational, not endorsements.</p><div className="analysis-tools-list">{marketTools.map((tool) => <a className="analysis-tool" href={tool.url} key={tool.name} target="_blank" rel="noreferrer"><span className="analysis-tool-type">{tool.type}</span><span className="analysis-tool-copy"><strong>{tool.name}</strong><small>{tool.description}</small></span><ExternalLink size={15} /></a>)}</div></section>
           <footer className="page-footer"><span>cryptocurrency.wiki <span className="footer-dot">·</span> Independent educational resource</span><span>Information only. Not financial advice.</span></footer>
         </main>
       </div>
