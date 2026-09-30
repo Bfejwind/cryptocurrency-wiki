@@ -30,10 +30,10 @@ button:focus-visible, input:focus-visible, textarea:focus-visible, a:focus-visib
 #root { width: 100%; max-width: none; min-height: 100svh; margin: 0; border: 0; display: block; text-align: left; }
 
 .app-shell { min-height: 100svh; }
-.topbar { height: 68px; background: #fff; border-bottom: 1px solid var(--line); display: flex; align-items: center; padding: 0 34px; gap: 36px; position: sticky; top: 0; z-index: 20; }
+.topbar { height: 68px; background: #000; border-bottom: 1px solid var(--line); display: flex; align-items: center; padding: 0 34px; gap: 36px; position: sticky; top: 0; z-index: 20; }
 .wordmark { display: inline-flex; align-items: center; gap: 10px; color: var(--ink); text-decoration: none; font-weight: 700; font-size: 17px; letter-spacing: 0; white-space: nowrap; }
-.brand-mark { width: 30px; height: 30px; border-radius: 50%; background: var(--green); color: var(--lime); display: inline-grid; place-items: center; font: 600 11px var(--mono); letter-spacing: 0; }
-.wordmark-light { color: #839087; font-weight: 500; }
+.wordmark { flex-shrink: 0; }
+.site-logo { display: block; width: 180px; height: auto; }
 .searchbox { height: 36px; width: min(440px, 40vw); display: flex; align-items: center; gap: 9px; border: 1px solid #e8ebe5; background: #f8f9f6; border-radius: 4px; color: #8a938d; padding: 0 10px; }
 .searchbox input { min-width: 0; width: 100%; color: var(--ink); border: 0; outline: 0; background: transparent; font-size: 12px; }
 .searchbox input::placeholder { color: #9aa19b; }
@@ -41,7 +41,9 @@ button:focus-visible, input:focus-visible, textarea:focus-visible, a:focus-visib
 .searchbox kbd { flex: none; color: #838b86; font: 10px var(--mono); border: 1px solid #e3e7e0; background: white; border-radius: 3px; padding: 2px 5px; }
 .top-actions { margin-left: auto; display: flex; align-items: center; gap: 22px; }
 .guide-nav-link { display: inline-flex; align-items: center; gap: 7px; color: #52745c; text-decoration: none; font-size: 12px; }
-.guide-nav-link:hover { color: #294839; }
+.topbar .guide-nav-link { color: #c5d7c9; }
+.topbar .guide-nav-link:hover { color: var(--lime); }
+.topbar .independent, .topbar .mobile-menu { color: #b8c4bb; }
 .independent { display: inline-flex; align-items: center; gap: 7px; color: #727d76; font-size: 11px; white-space: nowrap; }
 .independent > span, .live-indicator, .foot-dot { display: inline-block; width: 7px; height: 7px; background: #72a885; border-radius: 50%; }
 .settings-button { display: inline-flex; align-items: center; gap: 7px; border: 1px solid var(--line); padding: 8px 11px; background: #fff; border-radius: 4px; font-size: 11px; cursor: pointer; }
@@ -69,7 +71,7 @@ button:focus-visible, input:focus-visible, textarea:focus-visible, a:focus-visib
 
 .main-content { --content-gutter: 42px; width: 100%; max-width: 1362px; margin: 0 auto; padding: 33px var(--content-gutter) 20px; }
 .eyebrow { display: flex; align-items: center; gap: 9px; color: #78847a; }
-.eyebrow-mark { display: inline-grid; place-items: center; width: 20px; height: 20px; background: #d9e8d8; color: #3e614b; border-radius: 50%; font-size: 8px; }
+.eyebrow-mark { display: block; flex-shrink: 0; width: 24px; height: 24px; object-fit: contain; }
 .eyebrow-rule { height: 1px; background: #dde3db; flex: 1; margin-left: 10px; }
 .intro-row { min-height: 275px; display: flex; justify-content: space-between; align-items: center; margin: 0 calc(var(--content-gutter) * -1); padding: 32px var(--content-gutter) 35px; isolation: isolate; background-color: #19382c; background-image: linear-gradient(90deg, rgba(16, 37, 29, .94) 0%, rgba(17, 39, 30, .84) 48%, rgba(17, 39, 30, .70) 100%), url('https://images.unsplash.com/photo-1639762681485-074b7f938ba0?auto=format&fit=crop&w=2200&q=85'); background-position: center 46%; background-size: cover; }
 .intro-row h1 { margin: 0; font: 500 57px/.96 'Newsreader', Georgia, serif; letter-spacing: 0; color: #fff; }
@@ -290,7 +292,7 @@ button:focus-visible, input:focus-visible, textarea:focus-visible, a:focus-visib
   body { min-width: 320px; }
   .topbar { gap: 8px; padding: 0 12px; }
   .wordmark { gap: 7px; font-size: 14px; }
-  .brand-mark { width: 27px; height: 27px; }
+  .site-logo { width: 150px; }
   .searchbox { width: 34px; height: 34px; justify-content: center; padding: 0; border: 0; background: transparent; margin-left: auto; }
   .searchbox input, .searchbox kbd { display: none; }
   .searchbox.search-expanded { position: absolute; right: 108px; left: 48px; width: auto; justify-content: flex-start; padding: 0 9px; border: 1px solid var(--line); background: #f8f9f6; }

@@ -1,3 +1,5 @@
+import logo from '../images/logo.png'
+import icon from '../images/icon.png'
 import { useEffect, useEffectEvent, useMemo, useState } from 'react'
 import { ArrowDownRight, ArrowRight, ArrowUpRight, BookOpen, Clock3, Command, ExternalLink, Globe2, Layers3, Menu, Newspaper, Search, ShieldCheck, Sparkles, X } from 'lucide-react'
 import './WikiApp.css'
@@ -116,7 +118,7 @@ export default function WikiApp() {
     <div className="app-shell">
       <header className="topbar">
         <button className="mobile-menu icon-button" title="Toggle navigation" onClick={() => setMobileNavOpen(!mobileNavOpen)}><Menu size={19} /></button>
-        <a className="wordmark" href="#home" onClick={() => { setCategory('All topics'); setQuery('') }}><span className="brand-mark">cw</span><span>cryptocurrency<span className="wordmark-light">.wiki</span></span></a>
+        <a className="wordmark" href="#home" onClick={() => { setCategory('All topics'); setQuery('') }}><img className="site-logo" src={logo} alt="Cryptocurrency.Wiki" /></a>
         <div className={`searchbox ${searchExpanded ? 'search-expanded' : ''}`}><button className="search-trigger icon-button" aria-label="Open search" onClick={() => { setSearchExpanded(true); window.setTimeout(() => document.getElementById('encyclopedia-search')?.focus(), 0) }}><Search size={17} /></button><input id="encyclopedia-search" aria-label="Search the encyclopedia" placeholder="Search the encyclopedia..." value={query} onChange={(event) => setQuery(event.target.value)} /></div>
         <div className="top-actions"><a className="guide-nav-link" href="/learn"><BookOpen size={15} /><span>Learning guide</span></a><span className="independent"><span /> Independent resource</span></div>
       </header>
@@ -130,7 +132,7 @@ export default function WikiApp() {
           <div className="sidebar-foot"><span className="foot-dot" /> Sources checked {lastUpdated}</div>
         </aside>
         <main className="main-content" id="home">
-          <div className="eyebrow"><span className="eyebrow-mark">CW</span> THE OPEN CRYPTO ENCYCLOPEDIA <span className="eyebrow-rule" /></div>
+          <div className="eyebrow"><img className="eyebrow-mark" src={icon} alt="" /> THE OPEN CRYPTO ENCYCLOPEDIA <span className="eyebrow-rule" /></div>
           <section className="intro-row"><div><h1>Understand the<br /><em>whole chain.</em></h1><p className="intro-copy">An independent guide to the technology, people, and ideas changing money.</p></div><div className="intro-aside"><span className="asterisk">✳</span><span>Curious minds<br />welcome here.</span></div></section>
           <div className="market-module"><section className="market-strip" aria-label="Cryptocurrency market overview"><div className="market-heading"><span className="live-indicator" /><span>MARKET PULSE</span><span className="market-caption">{marketStatus === 'live' ? 'LIVE · USD' : marketStatus === 'loading' ? 'CONNECTING' : 'SAMPLE · USD'}</span></div><div className="coin-row">{coins.slice(0, 4).map((coin, index) => <div className="coin-item" key={coin.id}><div className={`coin-icon coin-${index}`}>{coin.image ? <img src={coin.image} alt="" /> : coin.symbol.slice(0, 1).toUpperCase()}</div><div className="coin-info"><span className="coin-name">{coin.symbol.toUpperCase()} <small>{coin.name}</small></span><strong>{coin.current_price ? money(coin.current_price) : '—'}</strong></div><span className={`coin-change ${coin.price_change_percentage_24h < 0 ? 'negative' : ''}`}>{coin.current_price ? <>{coin.price_change_percentage_24h < 0 ? <ArrowDownRight size={13} /> : <ArrowUpRight size={13} />}{Math.abs(coin.price_change_percentage_24h).toFixed(2)}%</> : '···'}</span></div>)}</div></section><div className="market-actions"><button className="refresh-button" title="Refresh market and news sources" onClick={() => void refreshResearch()} disabled={refreshing}>{refreshing ? <span className="spinner" /> : <ArrowRight size={15} />}{refreshing ? 'Updating' : 'Refresh'}</button></div></div>
           <div className="content-grid">

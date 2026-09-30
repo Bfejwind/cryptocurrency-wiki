@@ -1,3 +1,4 @@
+import logo from '../images/logo.png'
 import { ArrowLeft, ArrowRight, BookOpen, Clock3, ExternalLink, ShieldAlert } from 'lucide-react'
 import './LearningGuide.css'
 import { learningStages as stages } from './learningData'
@@ -12,7 +13,7 @@ export default function LearningGuide() {
   return (
     <div className="guide-shell">
       <header className="guide-topbar">
-        <a className="wordmark" href="/" aria-label="Cryptocurrency.Wiki home"><span className="brand-mark">cw</span><span>cryptocurrency<span className="wordmark-light">.wiki</span></span></a>
+        <a className="wordmark" href="/" aria-label="Cryptocurrency.Wiki home"><img className="site-logo" src={logo} alt="Cryptocurrency.Wiki" /></a>
         <a className="guide-return" href="/"><ArrowLeft size={15} /> Back to the encyclopedia</a>
       </header>
       <main className="guide-main">
