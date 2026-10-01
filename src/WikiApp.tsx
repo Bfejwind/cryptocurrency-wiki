@@ -117,7 +117,7 @@ export default function WikiApp() {
     <div className="app-shell">
       <header className="topbar">
         <button className="mobile-menu icon-button" title="Toggle navigation" onClick={() => setMobileNavOpen(!mobileNavOpen)}><Menu size={19} /></button>
-        <a className="wordmark" href="#home" onClick={() => { setCategory('All topics'); setQuery('') }}><img className="site-logo" src={logo} alt="Cryptocurrency.Wiki" /></a>
+        <a className="wordmark" href="#home" onClick={() => { setCategory('All topics'); setQuery('') }}><img className="site-logo" src={logo} alt="CryptoLoot.Wiki" /></a>
         <div className={`searchbox ${searchExpanded ? 'search-expanded' : ''}`}><button className="search-trigger icon-button" aria-label="Open search" onClick={() => { setSearchExpanded(true); window.setTimeout(() => document.getElementById('encyclopedia-search')?.focus(), 0) }}><Search size={17} /></button><input id="encyclopedia-search" aria-label="Search the encyclopedia" placeholder="Search the encyclopedia..." value={query} onChange={(event) => setQuery(event.target.value)} /></div>
         <div className="top-actions"><a className="guide-nav-link" href="/learn"><BookOpen size={15} /><span>Learning guide</span></a><span className="independent"><span /> Independent resource</span></div>
       </header>
@@ -148,7 +148,7 @@ export default function WikiApp() {
             </aside>
           </div>
           <section className="analysis-tools-section" id="market-tools" aria-labelledby="market-tools-title"><div className="section-heading"><div><span className="section-kicker">RESEARCH DESK</span><h2 id="market-tools-title">Market analysis tools</h2></div><span className="source-label">EXTERNAL RESOURCES</span></div><p className="analysis-tools-intro">Use multiple sources, understand what each metric measures, and verify data before drawing conclusions. These links are informational, not endorsements.</p><div className="analysis-tools-list">{marketTools.map((tool) => <a className="analysis-tool" href={tool.url} key={tool.name} target="_blank" rel="noreferrer"><span className="analysis-tool-type">{tool.type}</span><span className="analysis-tool-copy"><strong>{tool.name}</strong><small>{tool.description}</small></span><ExternalLink size={15} /></a>)}</div></section>
-          <footer className="page-footer"><span>cryptocurrency.wiki <span className="footer-dot">·</span> Independent educational resource</span><span>Information only. Not financial advice.</span></footer>
+          <footer className="page-footer"><span>cryptoloot.wiki <span className="footer-dot">·</span> Independent educational resource</span><span>Information only. Not financial advice.</span></footer>
         </main>
       </div>
       {notice && <div className="toast" role="status">{notice}<button title="Dismiss" onClick={() => setNotice('')}><X size={14} /></button></div>}

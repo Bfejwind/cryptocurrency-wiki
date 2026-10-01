@@ -1,6 +1,6 @@
 services:
   - type: web
-    name: cryptocurrency-wiki
+    name: cryptoloot-wiki
     runtime: node
     plan: free
     buildCommand: npm ci --include=dev && npm run build

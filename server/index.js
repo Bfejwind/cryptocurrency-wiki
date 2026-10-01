@@ -89,4 +89,4 @@ if (existsSync(path.join(dist, 'index.html'))) {
   app.get(/^\/(?!api\/).*/, (_request, response) => response.sendFile(path.join(dist, 'index.html')))
 }
 
-app.listen(port, '0.0.0.0', () => console.log(`Cryptocurrency.Wiki API listening on http://localhost:${port}`))
+app.listen(port, '0.0.0.0', () => console.log(`CryptoLoot.Wiki API listening on http://localhost:${port}`))

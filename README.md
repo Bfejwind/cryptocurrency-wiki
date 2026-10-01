@@ -1,4 +1,4 @@
-# Cryptocurrency.Wiki
+# CryptoLoot.Wiki
 
 An independent educational reference for cryptocurrency and blockchain technology, with live market and news feeds and an editorial review queue.
 

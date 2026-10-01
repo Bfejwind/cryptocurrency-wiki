@@ -13,7 +13,7 @@ export default function LearningGuide() {
   return (
     <div className="guide-shell">
       <header className="guide-topbar">
-        <a className="wordmark" href="/" aria-label="Cryptocurrency.Wiki home"><img className="site-logo" src={logo} alt="Cryptocurrency.Wiki" /></a>
+        <a className="wordmark" href="/" aria-label="CryptoLoot.Wiki home"><img className="site-logo" src={logo} alt="CryptoLoot.Wiki" /></a>
         <a className="guide-return" href="/"><ArrowLeft size={15} /> Back to the encyclopedia</a>
       </header>
       <main className="guide-main">
@@ -51,7 +51,7 @@ export default function LearningGuide() {
           <div><span className="guide-eyebrow">REFERENCE TOOLS</span><h2>Continue your research</h2><p>Use several sources and check what each metric actually measures. Tool links are for research, not endorsements.</p></div>
           <div className="guide-tool-list">{tools.map((tool) => <a href={tool.url} key={tool.name} target="_blank" rel="noreferrer"><span><strong>{tool.name}</strong><small>{tool.description}</small></span><ExternalLink size={15} /></a>)}</div>
         </section>
-        <footer className="guide-footer"><a href="/">Cryptocurrency.Wiki</a><span>Independent educational resource · Not financial advice</span></footer>
+        <footer className="guide-footer"><a href="/">CryptoLoot.Wiki</a><span>Independent educational resource · Not financial advice</span></footer>
       </main>
     </div>
   )

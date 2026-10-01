@@ -185,7 +185,7 @@ export default function LearningLesson({ lessonId }: { lessonId: string }) {
 
   useEffect(() => {
     if (!stage || !detail) return
-    document.title = `${stage.title} | Cryptocurrency.Wiki Learning Guide`
+    document.title = `${stage.title} | CryptoLoot.Wiki Learning Guide`
     if (!detail.newsKeywords?.length) return
 
     let cancelled = false
@@ -202,14 +202,14 @@ export default function LearningLesson({ lessonId }: { lessonId: string }) {
   }, [stage, detail])
 
   if (!stage || !detail) {
-    return <div className="lesson-shell"><header className="guide-topbar"><a className="wordmark" href="/"><img className="site-logo" src={logo} alt="Cryptocurrency.Wiki" /></a></header><main className="lesson-main"><h1>Lesson not found</h1><a href="/learn">Return to the learning guide</a></main></div>
+    return <div className="lesson-shell"><header className="guide-topbar"><a className="wordmark" href="/"><img className="site-logo" src={logo} alt="CryptoLoot.Wiki" /></a></header><main className="lesson-main"><h1>Lesson not found</h1><a href="/learn">Return to the learning guide</a></main></div>
   }
 
   const previous = stages[stageIndex - 1]
   const next = stages[stageIndex + 1]
 
   return <div className="lesson-shell">
-    <header className="guide-topbar"><a className="wordmark" href="/" aria-label="Cryptocurrency.Wiki home"><img className="site-logo" src={logo} alt="Cryptocurrency.Wiki" /></a><a className="guide-return" href="/learn"><ArrowLeft size={15} /> All learning stages</a></header>
+    <header className="guide-topbar"><a className="wordmark" href="/" aria-label="CryptoLoot.Wiki home"><img className="site-logo" src={logo} alt="CryptoLoot.Wiki" /></a><a className="guide-return" href="/learn"><ArrowLeft size={15} /> All learning stages</a></header>
     <main className="lesson-main">
       <nav className="lesson-breadcrumb" aria-label="Breadcrumb"><a href="/learn">Learning guide</a><span>/</span><span>{stage.title}</span></nav>
       <section className="lesson-hero" style={{ backgroundImage: `linear-gradient(90deg, rgba(16, 37, 29, .94), rgba(17, 39, 30, .70)), url('${detail.image}')` }}>
@@ -228,7 +228,7 @@ export default function LearningLesson({ lessonId }: { lessonId: string }) {
         <aside className="lesson-aside"><span className="guide-eyebrow">ROADMAP</span><p>{stage.summary}</p><div className="lesson-aside-progress">STAGE {stageIndex + 1} OF {stages.length}</div><a className="lesson-outline-link" href="/learn">View all stages <ArrowRight size={14} /></a></aside>
       </div>
       <nav className="lesson-pagination" aria-label="Lesson navigation">{previous ? <a href={`/learn/${previous.id}`}><ArrowLeft size={15} /><span><small>PREVIOUS</small><strong>{previous.title}</strong></span></a> : <span />}{next ? <a href={`/learn/${next.id}`}><span><small>NEXT</small><strong>{next.title}</strong></span><ArrowRight size={15} /></a> : <a href="/learn"><span><small>FINISHED THE PATH?</small><strong>Return to all stages</strong></span><ArrowRight size={15} /></a>}</nav>
-      <footer className="guide-footer"><a href="/">Cryptocurrency.Wiki</a><span>Independent educational resource · Not financial advice</span></footer>
+      <footer className="guide-footer"><a href="/">CryptoLoot.Wiki</a><span>Independent educational resource · Not financial advice</span></footer>
     </main>
   </div>
 }
