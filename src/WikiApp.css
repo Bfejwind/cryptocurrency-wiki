@@ -84,8 +84,8 @@ button:focus-visible, input:focus-visible, textarea:focus-visible, a:focus-visib
 .coin-row { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; }
 .coin-item { display: flex; align-items: center; gap: 8px; min-width: 0; }
 .coin-icon { flex: none; width: 27px; height: 27px; border-radius: 50%; display: grid; place-items: center; color: #fff; background: #d99148; font: 500 11px var(--mono); }
-.coin-icon img { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; }
-.coin-1 { background: #6172a3; }.coin-2 { background: #74a98d; }.coin-3 { background: #579e91; }
+.coin-icon img { width: 100%; height: 100%; object-fit: contain; }
+
 .coin-info { display: grid; min-width: 0; gap: 0; line-height: 1.25; }
 .coin-name { color: #46554b; font: 500 10px var(--mono); white-space: nowrap; }
 .coin-name small { font: 10px 'DM Sans', sans-serif; color: #929c94; margin-left: 3px; }
@@ -116,8 +116,8 @@ button:focus-visible, input:focus-visible, textarea:focus-visible, a:focus-visib
 .article-card-topic-consensus,
 .article-card-topic-wallets,
 .article-card-topic-smart-contracts { background-color: #14241c; background-repeat: no-repeat; background-position: center; background-size: cover; border-color: rgba(218, 231, 217, .26); }
-.article-card-topic-bitcoin { background-image: linear-gradient(180deg, rgba(12, 19, 16, .42) 0%, rgba(13, 25, 19, .76) 43%, rgba(13, 26, 19, .96) 100%), url('https://images.unsplash.com/photo-1518546305927-5a555bb7020d?auto=format&fit=crop&w=1000&q=80'); background-position: center 46%; }
-.article-card-topic-ethereum { background-image: linear-gradient(180deg, rgba(12, 19, 16, .40) 0%, rgba(13, 25, 19, .76) 43%, rgba(13, 26, 19, .96) 100%), url('https://images.unsplash.com/photo-1621761191319-c6fb62004040?auto=format&fit=crop&w=1000&q=80'); background-position: center 45%; }
+.article-card-topic-bitcoin { background-image: linear-gradient(90deg, rgba(20, 36, 28, .98), rgba(20, 36, 28, .72)), url('/coins/btc.svg'); background-position: center, right 16px center; background-size: cover, 112px 112px; }
+.article-card-topic-ethereum { background-image: linear-gradient(90deg, rgba(20, 36, 28, .98), rgba(20, 36, 28, .72)), url('/coins/eth.svg'); background-position: center, right 16px center; background-size: cover, 112px 112px; }
 .article-card-topic-stablecoins { background-image: linear-gradient(180deg, rgba(12, 19, 16, .42) 0%, rgba(13, 25, 19, .78) 43%, rgba(13, 26, 19, .96) 100%), url('https://images.unsplash.com/photo-1579621970795-87facc2f976d?auto=format&fit=crop&w=1000&q=80'); background-position: center 48%; }
 .article-card-topic-consensus { background-image: linear-gradient(180deg, rgba(12, 19, 16, .44) 0%, rgba(13, 25, 19, .78) 43%, rgba(13, 26, 19, .96) 100%), url('https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&w=1000&q=80'); background-position: center 42%; }
 .article-card-topic-wallets { background-image: linear-gradient(180deg, rgba(12, 19, 16, .42) 0%, rgba(13, 25, 19, .78) 43%, rgba(13, 26, 19, .96) 100%), url('https://images.unsplash.com/photo-1563013544-824ae1b704d3?auto=format&fit=crop&w=1000&q=80'); background-position: center 45%; }
