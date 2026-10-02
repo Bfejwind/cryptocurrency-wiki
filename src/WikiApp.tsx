@@ -149,6 +149,22 @@ export default function WikiApp() {
             </aside>
           </div>
           <section className="analysis-tools-section" id="market-tools" aria-labelledby="market-tools-title"><div className="section-heading"><div><span className="section-kicker">RESEARCH DESK</span><h2 id="market-tools-title">Market analysis tools</h2></div><span className="source-label">EXTERNAL RESOURCES</span></div><p className="analysis-tools-intro">Use multiple sources, understand what each metric measures, and verify data before drawing conclusions. These links are informational, not endorsements.</p><div className="analysis-tools-list">{marketTools.map((tool) => <a className="analysis-tool" href={tool.url} key={tool.name} target="_blank" rel="noreferrer"><span className="analysis-tool-type">{tool.type}</span><span className="analysis-tool-copy"><strong>{tool.name}</strong><small>{tool.description}</small></span><ExternalLink size={15} /></a>)}</div></section>
+          <section className="token-embed-section" aria-labelledby="token-embed-title">
+            <div className="section-heading">
+              <h2 id="token-embed-title">CryptoLoot on Pump.fun</h2>
+              <a className="text-link" href="https://pump.fun/coin/22fCpEDJi12TiFmf6R8Xrx1rGpzNwRJk7f266pJ1pump" target="_blank" rel="noopener noreferrer">Open on Pump.fun <ExternalLink size={15} /></a>
+            </div>
+            <p className="token-embed-note">If the panel is unavailable, open the page on Pump.fun.</p>
+            <iframe
+              className="token-embed"
+              title="CryptoLoot coin on Pump.fun"
+              src="https://pump.fun/coin/22fCpEDJi12TiFmf6R8Xrx1rGpzNwRJk7f266pJ1pump?embed=1"
+              width="100%"
+              height="700"
+              loading="lazy"
+              referrerPolicy="strict-origin-when-cross-origin"
+            />
+          </section>
           <footer className="page-footer"><span>cryptoloot.wiki <span className="footer-dot">·</span> Independent educational resource</span><span>Information only. Not financial advice.</span></footer>
         </main>
       </div>
