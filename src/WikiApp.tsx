@@ -1,4 +1,5 @@
 import logo from '../images/logo.png'
+import coinArtwork from '../images/icon.png'
 import { useEffect, useEffectEvent, useMemo, useState } from 'react'
 import { ArrowDownRight, ArrowRight, ArrowUpRight, BookOpen, Clock3, Command, ExternalLink, Globe2, Layers3, Menu, Newspaper, Search, ShieldCheck, Sparkles, X } from 'lucide-react'
 import './WikiApp.css'
@@ -154,16 +155,16 @@ export default function WikiApp() {
               <h2 id="token-embed-title">CryptoLoot on Pump.fun</h2>
               <a className="text-link" href="https://pump.fun/coin/22fCpEDJi12TiFmf6R8Xrx1rGpzNwRJk7f266pJ1pump" target="_blank" rel="noopener noreferrer">Open on Pump.fun <ExternalLink size={15} /></a>
             </div>
-            <p className="token-embed-note">If the panel is unavailable, open the page on Pump.fun.</p>
-            <iframe
-              className="token-embed"
-              title="CryptoLoot coin on Pump.fun"
-              src="https://pump.fun/coin/22fCpEDJi12TiFmf6R8Xrx1rGpzNwRJk7f266pJ1pump?embed=1"
-              width="100%"
-              height="700"
-              loading="lazy"
-              referrerPolicy="strict-origin-when-cross-origin"
-            />
+            <div className="token-card">
+              <img className="token-card-logo" src={coinArtwork} alt="" width={80} height={80} loading="lazy" />
+              <div className="token-card-copy">
+                <h3>CryptoLoot.Wiki</h3>
+                <p>View the coin page, chart, and activity on Pump.fun.</p>
+                <span className="token-address-label">Solana token address</span>
+                <code className="token-address">22fCpEDJi12TiFmf6R8Xrx1rGpzNwRJk7f266pJ1pump</code>
+              </div>
+              <a className="dark-button token-card-link" href="https://pump.fun/coin/22fCpEDJi12TiFmf6R8Xrx1rGpzNwRJk7f266pJ1pump" target="_blank" rel="noopener noreferrer">View on Pump.fun <ExternalLink size={15} /></a>
+            </div>
           </section>
           <footer className="page-footer"><span>cryptoloot.wiki <span className="footer-dot">·</span> Independent educational resource</span><span>Information only. Not financial advice.</span></footer>
         </main>

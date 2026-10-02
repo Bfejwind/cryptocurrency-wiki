@@ -1,4 +1,4 @@
-import { mkdir, writeFile } from 'node:fs/promises'
+import { copyFile, mkdir, writeFile } from 'node:fs/promises'
 import { fileURLToPath } from 'node:url'
 import sharp from 'sharp'
 
@@ -57,4 +57,11 @@ const header = Buffer.alloc(6)
 header.writeUInt16LE(1, 2)
 header.writeUInt16LE(sizes.length, 4)
 await writeFile(new URL('favicon.ico', output), Buffer.concat([header, ...entries, ...images]))
+// Vite fingerprints these referenced assets so changed artwork gets a new URL.
+// Keep the public copies as stable fallbacks for browsers requesting /favicon.ico.
+const bundled = new URL('../images/favicons/', import.meta.url)
+await mkdir(bundled, { recursive: true })
+for (const name of ['favicon.ico', 'favicon-16.png', 'favicon-32.png', 'apple-touch-icon.png']) {
+  await copyFile(new URL(name, output), new URL(name, bundled))
+}
 console.log('Generated PNG, ICO, and Apple touch icons from images/icon.png.')

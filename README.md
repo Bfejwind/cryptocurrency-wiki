@@ -19,6 +19,18 @@ npm run lint
 npm run build
 ```
 
+Favicons are generated from `images/icon.png` before development and production
+builds. Vite gives the browser-tab icons content-hashed filenames so replacing the
+artwork changes their URLs. Stable copies, including `/favicon.ico`, remain in
+`public` for clients that request the conventional paths. Run `npm run icons`
+after changing the source image during an already-running development session.
+
+The home page's Pump.fun card opens the coin in a new tab. The Pump.fun coin page
+blocks third-party framing with `X-Frame-Options: SAMEORIGIN` and CSP
+`frame-ancestors 'self'`; adding `?embed=1` does not override those headers.
+An inline Pump.fun panel requires an officially supported embeddable endpoint
+or permission from Pump.fun to frame its page.
+
 The article library and review queue are stored in the current browser's local storage. This starter is a single-editor prototype; a public multi-user deployment should replace local storage with authenticated editorial roles and a shared database.
 
 ## Deploy on Render

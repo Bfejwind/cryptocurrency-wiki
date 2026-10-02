@@ -78,8 +78,14 @@ button:focus-visible, input:focus-visible, textarea:focus-visible, a:focus-visib
 
 .token-embed-section { min-width: 0; margin-top: 32px; }
 .token-embed-section .section-heading { flex-wrap: wrap; }
-.token-embed-note { color: var(--muted); font-size: 12px; }
-.token-embed { display: block; width: 100%; height: clamp(500px, 75vh, 700px); border: 0; border-radius: 16px; background: #14241c; }
+.token-card { display: flex; flex-wrap: wrap; align-items: center; gap: 20px; padding: clamp(16px, 3vw, 28px); border: 1px solid var(--line); border-radius: 16px; background: #e7eee4; }
+.token-card-logo { flex: none; object-fit: contain; border-radius: 50%; }
+.token-card-copy { flex: 1 1 220px; min-width: 0; }
+.token-card-copy h3 { margin: 0 0 8px; }
+.token-card-copy p { margin: 0 0 12px; color: var(--muted); font-size: 13px; }
+.token-address-label { display: block; margin-bottom: 4px; font-size: 11px; color: var(--muted); }
+.token-address { display: block; overflow-wrap: anywhere; font-size: 11px; }
+.token-card-link { text-decoration: none; }
 
 .market-module { display: grid; gap: 8px; }
 .market-strip { min-height: 86px; background: white; border: 1px solid var(--line); border-radius: 5px; padding: 13px 15px 12px; display: flex; flex-direction: column; gap: 9px; }
