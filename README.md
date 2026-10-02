@@ -19,12 +19,12 @@ npm run lint
 npm run build
 ```
 
-Favicons are generated from `images/icon.png` before development and production
-builds. The browser tab explicitly uses a single 96px PNG of that artwork, avoiding
-selection of a competing ICO or smaller PNG. Vite gives the icons content-hashed filenames so replacing the
-artwork changes their URLs. Stable copies, including `/favicon.ico`, remain in
-`public` for clients that request the conventional paths. Run `npm run icons`
-after changing the source image during an already-running development session.
+The browser tab uses `images/favicon.ico` directly. Vite gives it a content-hashed
+filename in production so replacing the file changes its URL. Before development
+and production builds, the same ICO is copied unchanged to `public/favicon.ico`
+for browsers requesting the conventional path. Run `npm run icons` after replacing
+the ICO during an already-running development session. The Apple touch icon is
+maintained separately at `public/apple-touch-icon.png`.
 
 The home page's Pump.fun card opens the coin in a new tab. The Pump.fun coin page
 blocks third-party framing with `X-Frame-Options: SAMEORIGIN` and CSP

@@ -1,5 +1,5 @@
 import logo from '../images/logo.png'
-import coinArtwork from '../images/icon.png'
+import coinArtwork from '../images/favicon.ico'
 import { useEffect, useEffectEvent, useMemo, useState } from 'react'
 import { ArrowDownRight, ArrowRight, ArrowUpRight, BookOpen, Clock3, Command, ExternalLink, Globe2, Layers3, Menu, Newspaper, Search, ShieldCheck, Sparkles, X } from 'lucide-react'
 import './WikiApp.css'
