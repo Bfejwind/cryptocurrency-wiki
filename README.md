@@ -20,7 +20,8 @@ npm run build
 ```
 
 Favicons are generated from `images/icon.png` before development and production
-builds. Vite gives the browser-tab icons content-hashed filenames so replacing the
+builds. The browser tab explicitly uses a single 96px PNG of that artwork, avoiding
+selection of a competing ICO or smaller PNG. Vite gives the icons content-hashed filenames so replacing the
 artwork changes their URLs. Stable copies, including `/favicon.ico`, remain in
 `public` for clients that request the conventional paths. Run `npm run icons`
 after changing the source image during an already-running development session.

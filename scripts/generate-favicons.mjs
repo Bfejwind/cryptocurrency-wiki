@@ -10,7 +10,7 @@ await mkdir(output, { recursive: true })
 const resize = (size) => sharp(fileURLToPath(source))
   .resize(size, size, { fit: 'contain', background: { r: 0, g: 0, b: 0, alpha: 0 } })
 
-for (const [name, size] of [['favicon-16.png', 16], ['favicon-32.png', 32], ['favicon.png', 48], ['apple-touch-icon.png', 180]]) {
+for (const [name, size] of [['favicon-16.png', 16], ['favicon-32.png', 32], ['favicon.png', 48], ['cryptoloot-tab.png', 96], ['apple-touch-icon.png', 180]]) {
   await resize(size).png().toFile(fileURLToPath(new URL(name, output)))
 }
 
@@ -61,7 +61,7 @@ await writeFile(new URL('favicon.ico', output), Buffer.concat([header, ...entrie
 // Keep the public copies as stable fallbacks for browsers requesting /favicon.ico.
 const bundled = new URL('../images/favicons/', import.meta.url)
 await mkdir(bundled, { recursive: true })
-for (const name of ['favicon.ico', 'favicon-16.png', 'favicon-32.png', 'apple-touch-icon.png']) {
+for (const name of ['favicon.ico', 'favicon-16.png', 'favicon-32.png', 'cryptoloot-tab.png', 'apple-touch-icon.png']) {
   await copyFile(new URL(name, output), new URL(name, bundled))
 }
 console.log('Generated PNG, ICO, and Apple touch icons from images/icon.png.')
